@@ -13,5 +13,19 @@
         <li>Fathan Zhafiri Arshymni (1301213300)</li>
         <li>Indra Wahyu (1301213135)</li>
     </ol>
+
+    <form onsubmit="event.preventDefault(); searchFile()">
+        <input type="text" name="file" id="file">
+        <button type="submit">Cari</button>
+    </form>
+    <script>
+        function searchFile() {
+            cari = document.getElementById('file').value;
+            console.log(cari);
+            console.log(window.location);
+            
+            window.location.replace(`${window.location.href + cari}`);
+        }
+    </script>
 </body>
 </html>
