@@ -1,51 +1,76 @@
-import socket  # import library socket
+import socket
+import urllib.parse
 
+def tcp_server():
+    host = '192.168.1.24'
+    port = 8080
 
-def tcp_server():  # definisikan fungsi tcp_server
-    host = '127.0.0.1'  # inisialisasi host
-    port = 8080  # inisialisasi port
-
-    # inisialisasi objek socket
     socket_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socket_server.setsockopt(
-        socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # set socket option
+    socket_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-    socket_server.bind((host, port))  # bind socket ke host dan port
-    socket_server.listen()  # listen socket
+    socket_server.bind((host, port))
+    socket_server.listen()
 
-    print(f'Web server running on {host}:{port}')  # print host dan port
+    print(f'Web server running on {host}:{port}')
 
-    while True:  # loop selama true
-        socket_client, client_address = socket_server.accept()  # terima koneksi dari client
+    while True:
+        socket_client, client_address = socket_server.accept()
+        # print(socket_client, client_address)
 
-        request = socket_client.recv(1024).decode()  # terima data dari client
-        print('dari client: ', request)  # print data dari client
+        request = socket_client.recv(1024).decode()
+        # request = request.split('\r\n\r\n')[0]
+        # print('From Client:\n{}'.format(request))
+        print('Client Address: {}'.format(client_address))
+        print('Client Host: {}'.format(client_address[0]))
+        print('Client Port: {}'.format(client_address[1]))
+        print('File Requested: {}'.format(request.split(' ')[1]))
 
-        response = handle_request(request)  # handle request dari client
-        print('\nresponse: ', response)  # print response
+        response = handle_request(request)
+        print('\n\nResponse:\n{}'.format(response))
 
-        socket_client.sendall(response.encode())  # kirim response ke client
-
-        socket_client.close()  # tutup koneksi agar tidak memakan resource
-
-
-def handle_request(request):  # definisikan fungsi handle_request
-    print('ini dari server: ' + request)  # print request dari client
-    response_line = 'HTTP/1.1 200 OK\n'  # inisialisasi response line
-    response_header = 'Content-Type: text/html\n'  # inisialisasi response header
-
-    try:  # try catch untuk membaca file agar tidak error
-        # cari & buka file index.html pada root folder
-        file = open('index.html', 'r')
-        response_body = file.read()  # baca isi file dan simpan ke response body
-        file.close()  # tutup file agar tidak memakan resource
-    except FileNotFoundError:  # jika file tidak ditemukan
-        # isi response body dengan 404 Not Found
-        response_body = '<h1>404 Not Found</h1>'
-
-    response = response_line + response_header + '\n' + \
-        response_body  # gabungkan response line, header, dan body
-    return response  # return response sebagai hasil dari fungsi handle_request
+        socket_client.sendall(response)
+        socket_client.close()
 
 
-tcp_server()  # jalankan fungsi tcp_server
+def handle_request(request):
+    print('\nFrom Server: \n' + request)
+    response_line = b'HTTP/1.1 200 OK\n'
+    response_header = b'Content-Type: *\n'
+
+    parsed_request = request.split(' ')
+    method = parsed_request[0]
+    url = parsed_request[1]
+
+    path = urllib.parse.unquote(urllib.parse.urlparse(url).path)
+
+    if path == '/':
+        path = '/index.html'
+
+    try:
+        with open('.' + path, 'rb') as file:
+            if path.endswith('.html'):
+                response_header = b'Content-Type: text/html\n'
+            elif path.endswith('.css'):
+                response_header = b'Content-Type: text/css\n'
+            elif path.endswith('.js'):
+                response_header = b'Content-Type: text/javascript\n'
+            elif path.endswith('.jpg'):
+                response_header = b'Content-Type: image/jpeg\n'
+            elif path.endswith('.pdf'):
+                response_header = b'Content-Type: application/pdf\n'
+            else:
+                response_header = b'Content-Type: *\n'
+                
+            response_body = file.read()
+
+        response = response_line + response_header + b'\n' + response_body
+    except FileNotFoundError:
+        response_line = b'HTTP/1.1 404 Not Found\n'
+        response_header = b'Content-Type: *\n'
+        response_body = b'<h1>404 Not Found</h1>'
+
+        response = response_line + response_header + b'\n' + response_body
+
+    return response
+
+tcp_server()
