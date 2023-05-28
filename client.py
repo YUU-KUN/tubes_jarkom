@@ -1,31 +1,25 @@
 import socket
 
 def tcp_client():
-    host = '192.168.1.24'
-    port = 8080
-    file_path = '/index.html'  # Specify the file path you want to request
+    host = '192.168.1.24'  # Tentukan host yang dituju
+    port = 8080  # Tentukan port yang dituju
 
-    # Create a socket object
-    socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    file_path = '/' + input('Masukkan file yang ingin diminta: ') # Tentukan file yang ingin diminta berdasarkan input dari user
 
-    # Connect to the server
-    socket_client.connect((host, port))
+    socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Buat objek socket
 
-    # Prepare the HTTP GET request
-    request = "GET {} HTTP/1.1\r\nHost: {}\r\n\r\n".format(file_path, host)
+    socket_client.connect((host, port)) # Hubungkan socket ke host dan port yang dituju
 
-    # Send the request to the server
-    socket_client.sendall(request.encode())
+    request = "GET {} HTTP/1.1\r\nHost: {}\r\n\r\n".format(file_path, host) # Siapkan permintaan HTTP GET
 
-    # Print client host and port, and the requested file
-    print("Client Host: {}, Port: {}".format(socket_client.getsockname()[0], socket_client.getsockname()[1]))
-    print("Requested File: {}".format(file_path))
+    socket_client.sendall(request.encode()) # Kirim permintaan ke server
 
-    # Receive and print the response from the server
-    response = socket_client.recv(1024).decode()
-    print(response)
+    print("Host Klien: {}, Port: {}".format(socket_client.getsockname()[0], socket_client.getsockname()[1])) # Cetak host dan port klien
+    print("File yang Diminta: {}".format(file_path)) # Cetak file yang diminta
 
-    # Close the connection
-    socket_client.close()
+    response = socket_client.recv(1024) # Terima dan cetak respon dari server
+    print('\n\nRespon:\n{}'.format(response)) # Tampilkan response
 
-tcp_client()
+    socket_client.close() # Tutup koneksi
+
+tcp_client() # Panggil fungsi tcp_client
