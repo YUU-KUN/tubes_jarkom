@@ -16,7 +16,6 @@
             flex-direction: column;
             justify-content: center;
             text-align: center;
-            /* font-family: sans-serif; */
         }
 
         p {
@@ -35,7 +34,6 @@
             padding: 15px;
             border: none;
             border-radius: 5px;
-            /* add shadow with #697D96 color */
             box-shadow: 0px 0px 5px 1px lightsteelblue;
         }
 
@@ -65,11 +63,6 @@
     <p>Fathan Zhafiri Arshymni (1301213300)</p>
     <p>Indra Wahyu (1301213135)</p>
 
-    <!-- <ol>
-        <li></li>
-        <li></li>
-    </ol> -->
-
     <form onsubmit="event.preventDefault(); searchFile()">
         <div class="input-container">
             <input list="options" type="text" name="file" id="file" placeholder="Cari file" autocomplete="off">
@@ -83,7 +76,6 @@
                 <option value="style.css">
             </datalist>
         </div>
-        <!-- <button type="submit">Cari</button> -->
     </form>
     <script>
         document.getElementById('file').value = '';
