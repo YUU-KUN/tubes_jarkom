@@ -11,7 +11,7 @@ def tcp_server(): # Definisikan fungsi tcp_server
     socket_server.bind((host, port)) # Hubungkan soket dengan host dan port
     socket_server.listen() # Listen / pantau koneksi
 
-    print(f'Web server berjalan di {host}:{port}') # Tampilkan pesan web server berjalan
+    print('Web server berjalan di {}:{}'.format(host, port)) # Tampilkan pesan web server berjalan
 
     while True: # Jalankan server secara terus menerus
         socket_client, client_address = socket_server.accept() # Terima koneksi dari klien, assign ke socket_client dan client_address
@@ -26,7 +26,11 @@ def tcp_server(): # Definisikan fungsi tcp_server
             print('File yang Diminta: {}'.format(request.split(' ')[1])) # Tampilkan file yang diminta
 
             response = handle_request(request) # Assign output fungsi handle_request ke variabel response
-            print('\n\nRespon:\n{}'.format(response)) # Tampilkan response
+            print('\n\nRespon Server:\n') # Tampilkan response
+            print('Alamat Server: {}'.format(socket_server.getsockname()[0])) # Tampilkan alamat server
+            print('Port Server: {}'.format(socket_server.getsockname()[1])) # Tampilkan port server
+            print('Respon: {}'.format(response)) # Tampilkan response
+
 
             socket_client.sendall(response) # Kirim response ke klien
         except: # Jika terjadi error
@@ -66,13 +70,12 @@ def handle_request(request): # Definisikan fungsi handle_request untuk mengolah 
             response_body = file.read() # Baca isi file
 
         response_line = b'HTTP/1.1 200 OK\n' # Definisikan response line sebagai HTTP/1.1 200 OK
-        response = response_line + response_header + b'\n' + response_body # Definisikan response sebagai response line + response header + response body
     except FileNotFoundError: # Jika file tidak ditemukan
         response_line = b'HTTP/1.1 404 Not Found\n' # Definisikan response line sebagai HTTP/1.1 404 Not Found
         response_header = b'Content-Type: *\n' # Definisikan response header sebagai 'Content-Type: *' untuk menerima semua jenis file
         response_body = b'<h1>404 Not Found</h1>' # Definisikan response body sebagai '<h1>404 Not Found</h1>'
 
-        response = response_line + response_header + b'\n' + response_body # Definisikan response sebagai response line + response header + response body
+    response = response_line + response_header + b'\n' + response_body # Definisikan response sebagai response line + response header + response body
 
     return response # Kembalikan response
 
