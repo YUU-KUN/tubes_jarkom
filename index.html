@@ -1,31 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tugas Besar Jaringan Komputer</title>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #E8F0FC;
+            color: #697D96;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            /* font-family: sans-serif; */
+        }
+
+        p {
+            margin: 5px auto;
+        }
+
+        form {
+            margin-top: 10%;
+            background-color: aqua;
+            width: 30%;
+            align-self: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            /* add shadow with #697D96 color */
+            box-shadow: 0px 0px 5px 1px lightsteelblue;
+        }
+
+        input::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            /* background-color: #697D96; */
+        }
+
+        .input-container img {
+            position: absolute;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+        }
+    </style>
 </head>
+
 <body>
     <h1>Kelompok 3 Tugas Besar Jaringan Komputer</h1>
     Anggota:
-    <ol>
-        <li>Fathan Zhafiri Arshymni (1301213300)</li>
-        <li>Indra Wahyu (1301213135)</li>
-    </ol>
+    <p>Fathan Zhafiri Arshymni (1301213300)</p>
+    <p>Indra Wahyu (1301213135)</p>
+
+    <!-- <ol>
+        <li></li>
+        <li></li>
+    </ol> -->
 
     <form onsubmit="event.preventDefault(); searchFile()">
-        <input type="text" name="file" id="file">
-        <button type="submit">Cari</button>
+        <div class="input-container">
+            <input list="options" type="text" name="file" id="file" placeholder="Cari file" autocomplete="off">
+            <img src="search.png" alt="search">
+            <datalist id="options">
+                <option value="index.html">
+                <option value="index2.html">
+                <option value="image.png">
+                <option value="CV.pdf">
+                <option value="javascript.js">
+                <option value="style.css">
+            </datalist>
+        </div>
+        <!-- <button type="submit">Cari</button> -->
     </form>
     <script>
+        document.getElementById('file').value = '';
+
         function searchFile() {
-            cari = document.getElementById('file').value;
-            console.log(cari);
-            console.log(window.location);
-            
-            window.location.replace(`${window.location.href + cari}`);
+            search_value = document.getElementById('file').value;
+            window.location.href = `${window.location.origin + '/' + search_value}`;
         }
     </script>
 </body>
+
 </html>

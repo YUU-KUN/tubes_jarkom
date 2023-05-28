@@ -15,20 +15,21 @@ def tcp_server():
 
     while True:
         socket_client, client_address = socket_server.accept()
-        # print(socket_client, client_address)
-
         request = socket_client.recv(1024).decode()
-        # request = request.split('\r\n\r\n')[0]
-        # print('From Client:\n{}'.format(request))
-        print('Client Address: {}'.format(client_address))
-        print('Client Host: {}'.format(client_address[0]))
-        print('Client Port: {}'.format(client_address[1]))
-        print('File Requested: {}'.format(request.split(' ')[1]))
+        try:
+            request = request.split('\r\n\r\n')[0]
+            print('From Client:\n')
+            print('Client Address: {}'.format(client_address))
+            print('Client Host: {}'.format(client_address[0]))
+            print('Client Port: {}'.format(client_address[1]))
+            print('File Requested: {}'.format(request.split(' ')[1]))
 
-        response = handle_request(request)
-        print('\n\nResponse:\n{}'.format(response))
+            response = handle_request(request)
+            print('\n\nResponse:\n{}'.format(response))
 
-        socket_client.sendall(response)
+            socket_client.sendall(response)
+        except:
+            pass
         socket_client.close()
 
 
