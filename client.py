@@ -6,7 +6,7 @@ def tcp_client():
 
     file_path = '/' + input('Masukkan file yang ingin diminta: ') # Tentukan file yang ingin diminta berdasarkan input dari user
 
-    socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Buat objek socket
+    socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Buat objek socket sebagai soket TCP
 
     socket_client.connect((host, port)) # Hubungkan socket ke host dan port yang dituju
 
